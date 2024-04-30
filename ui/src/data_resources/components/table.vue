@@ -386,6 +386,10 @@ export default {
           this.$refs.table.scrollTo(history.state.tableScrollTop, history.state.tableScrollLeft)
         })
       }
+
+      if(window.MotorAdmin.hooks.onTableLoaded) {
+        window.MotorAdmin.hooks.onTableLoaded();
+      }
     })
   },
   methods: {

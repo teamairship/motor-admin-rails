@@ -13,6 +13,13 @@ import AppHeader from 'navigation/components/header'
 import { currentUser } from 'navigation/scripts/user_store'
 import { windowHeight } from 'utils/scripts/dimensions'
 
+window.MotorAdmin = {
+  hooks: {
+    shouldRenderAction: undefined,
+    onTableLoaded: undefined
+  }
+};
+
 export default {
   name: 'App',
   components: {
