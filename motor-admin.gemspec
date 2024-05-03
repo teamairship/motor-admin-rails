@@ -11,10 +11,10 @@ Gem::Specification.new do |spec|
   spec.license     = 'AGPL-3.0'
 
   spec.metadata = {
-    'bug_tracker_uri' => 'https://github.com/motor-admin/motor-admin-rails/issues',
+    'bug_tracker_uri' => 'https://github.com/teamairship/motor-admin-rails/issues',
     'homepage_uri' => 'https://www.getmotoradmin.com',
-    'source_code_uri' => 'https://github.com/motor-admin/motor-admin-rails',
-    'documentation_uri' => 'https://github.com/motor-admin/motor-admin-rails/tree/master/guides',
+    'source_code_uri' => 'https://github.com/teamairship/motor-admin-rails',
+    'documentation_uri' => 'https://github.com/teamairship/motor-admin-rails/tree/main/guides',
     'rubygems_mfa_required' => 'true'
   }
 
