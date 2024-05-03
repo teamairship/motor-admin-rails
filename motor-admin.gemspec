@@ -3,7 +3,7 @@
 require_relative 'lib/motor/version'
 
 Gem::Specification.new do |spec|
-  spec.name        = 'motor-admin-unosquare'
+  spec.name        = 'motor-admin'
   spec.version     = Motor::VERSION
   spec.authors     = ['Pete Matsyburka']
   spec.email       = ['pete@getmotoradmin.com']
