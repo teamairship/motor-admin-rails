@@ -1,16 +1,19 @@
 <template>
   <template v-if="withButtons">
-    <VButton
-      v-for="(action, index) in buttonActions"
-      :key="action.name"
-      :class="index !== (buttonActions.length - 1) || (withDropdown && dropdownActions.length) ? 'me-2' : ''"
-      :type="buttonTypes[action.name]"
-      :ghost="!!buttonTypes[action.name]"
-      :size="buttonSize"
-      @click="applyAction(action)"
-    >
-      {{ action.display_name }}
-    </VButton>
+    <span v-for="(action, index) in buttonActions">
+      <VButton
+        :key="action.name"
+        :class="index !== (buttonActions.length - 1) || (withDropdown && dropdownActions.length) ? 'me-2' : ''"
+        :type="buttonTypes[action.name]"
+        :ghost="!!buttonTypes[action.name]"
+        :size="buttonSize"
+        @click="applyAction(action)"
+        v-if="shouldRenderAction(action)"
+      >
+        {{ action.display_name }}
+      </VButton>
+    </span>
+
   </template>
   <Dropdown
     v-if="(withDeselect || hasActions) && withDropdown && dropdownActions.length"
@@ -249,6 +252,13 @@ export default {
     }
   },
   methods: {
+    shouldRenderAction (action) {
+      if(window.MotorAdmin.hooks.shouldRenderAction && typeof window.MotorAdmin.hooks.shouldRenderAction === 'function') {
+        return window.MotorAdmin.hooks.shouldRenderAction(action, this.resource)
+      }
+
+      return true;
+    },
     deselect () {
       this.resources.forEach((resource) => {
         resource._selected = false
