@@ -5,6 +5,12 @@ module Motor
     include Motor::CurrentUserMethod
     include Motor::CurrentAbility
 
+    before_action :set_current_user_attributes
+
+    def set_current_user_attributes
+      Current.user = current_user
+    end
+
     if defined?(ActionText::Content)
       before_action do
         ActionText::Content.renderer = Motor::ApplicationController.renderer.new(request.env)
