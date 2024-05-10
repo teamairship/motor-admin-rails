@@ -16,7 +16,8 @@ import { windowHeight } from 'utils/scripts/dimensions'
 window.MotorAdmin = {
   hooks: {
     shouldRenderAction: undefined,
-    onTableLoaded: undefined
+    onTableLoaded: undefined,
+    onTableRefreshed: undefined,
   }
 };
 

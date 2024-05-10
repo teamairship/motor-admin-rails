@@ -384,9 +384,12 @@ export default {
       if (typeof history.state.tableScrollTop === 'number') {
         this.$nextTick(() => {
           this.$refs.table.scrollTo(history.state.tableScrollTop, history.state.tableScrollLeft)
+
+          if(window.MotorAdmin.hooks.onTableLoaded) {
+            window.MotorAdmin.hooks.onTableLoaded();
+          }
         })
       }
-
     })
   },
   methods: {
@@ -628,8 +631,8 @@ export default {
         this.$nextTick(() => {
           rowsCache.set(this.rowsCacheKey, result.data.data)
 
-          if(window.MotorAdmin.hooks.onTableLoaded) {
-            window.MotorAdmin.hooks.onTableLoaded();
+          if(window.MotorAdmin.hooks.onTableRefreshed) {
+            window.MotorAdmin.hooks.onTableRefreshed();
           }
 
         })
