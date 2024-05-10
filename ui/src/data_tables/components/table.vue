@@ -40,9 +40,8 @@
           />
           <th
             v-if="renderActions"
-            class="ivu-table-column ivu-table-column-center"
+            class="ivu-table-column ivu-table-column-center actions sticky"
             :class="{ 'border-top' : !borderless && headerBorder }"
-            :style="{ position: 'sticky', top: 0, right: 0, zIndex: 2 }"
           >
             {{ i18n['actions'] }}
           </th>
@@ -108,8 +107,7 @@
           </td>
           <td
             v-if="renderActions"
-            class="ivu-table-column ivu-table-column-center"
-            :style="{ position: 'sticky', right: 0, zIndex: 1 }"
+            class="ivu-table-column ivu-table-column-center actions sticky"
             @click.stop
           >
             <div class="ivu-table-cell">
