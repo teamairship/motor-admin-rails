@@ -387,9 +387,6 @@ export default {
         })
       }
 
-      if(window.MotorAdmin.hooks.onTableLoaded) {
-        window.MotorAdmin.hooks.onTableLoaded();
-      }
     })
   },
   methods: {
@@ -630,6 +627,11 @@ export default {
 
         this.$nextTick(() => {
           rowsCache.set(this.rowsCacheKey, result.data.data)
+
+          if(window.MotorAdmin.hooks.onTableLoaded) {
+            window.MotorAdmin.hooks.onTableLoaded();
+          }
+
         })
       }).catch((error) => {
         if (error.response) {
