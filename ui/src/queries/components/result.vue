@@ -1,167 +1,69 @@
 <template>
-  <div
-    v-if="errors.length"
-    class="d-flex justify-content-center align-items-center text-danger text-center"
-    :style="{ height: 'calc(100% - 34px)' }"
-  >
-    <p
-      v-for="error in errors"
-      :key="error.detail || error"
-    >
+  <div v-if="errors.length" class="d-flex justify-content-center align-items-center text-danger text-center"
+    :style="{ height: 'calc(100% - 34px)' }">
+    <p v-for="error in errors" :key="error.detail || error">
       {{ error.detail || error }}
     </p>
   </div>
-  <ValueResult
-    v-else-if="isValue"
-    :style="{ height: (withFooter && showFooter) || !data.length ? 'calc(100% - 34px)' : '100%' }"
-    :loading="loading"
-    :data="paginatedData"
-  />
-  <div
-    v-else-if="isTable || isMarkdown || isHtml || isTableToggle"
-    class="d-flex"
-    :style="{ height: withFooter ? 'calc(100% - 34px)' : '100%' }"
-  >
-    <div
-      v-if="isMarkdown || isHtml"
-      :style="{ width: showMarkdownTable ? '50%' : '100%' }"
-      :class="{ 'border-top': showMarkdownTable }"
-      class="bg-white"
-    >
-      <Markdown
-        v-if="isMarkdown"
-        :style="{ height: '100%', overflow: 'scroll', padding: '10px 13px' }"
-        :class="{ 'border-right': showMarkdownTable }"
-        :loading="loading"
-        :markdown="preferences.visualization_options.markdown"
-        :data="markdownData"
-      />
-      <Liquid
-        v-else-if="isHtml"
-        :style="{ height: '100%', overflow: 'scroll' }"
-        :class="{ 'border-right': showMarkdownTable }"
-        :loading="loading"
-        :html="preferences.visualization_options.html"
-        :data="markdownData"
-      />
+  <ValueResult v-else-if="isValue"
+    :style="{ height: (withFooter && showFooter) || !data.length ? 'calc(100% - 34px)' : '100%' }" :loading="loading"
+    :data="paginatedData" />
+  <KPIResult v-else-if="isKPI"
+    :style="{ height: (withFooter && showFooter) || !data.length ? 'calc(100% - 34px)' : '100%' }" :loading="loading"
+    :data="paginatedData" />
+
+  <div v-else-if="isTable || isMarkdown || isHtml || isTableToggle" class="d-flex"
+    :style="{ height: withFooter ? 'calc(100% - 34px)' : '100%' }">
+    <div v-if="isMarkdown || isHtml" :style="{ width: showMarkdownTable ? '50%' : '100%' }"
+      :class="{ 'border-top': showMarkdownTable }" class="bg-white">
+      <Markdown v-if="isMarkdown" :style="{ height: '100%', overflow: 'scroll', padding: '10px 13px' }"
+        :class="{ 'border-right': showMarkdownTable }" :loading="loading"
+        :markdown="preferences.visualization_options.markdown" :data="markdownData" />
+      <Liquid v-else-if="isHtml" :style="{ height: '100%', overflow: 'scroll' }"
+        :class="{ 'border-right': showMarkdownTable }" :loading="loading" :html="preferences.visualization_options.html"
+        :data="markdownData" />
     </div>
-    <div
-      v-if="isTable || isTableToggle || showMarkdownTable"
-      :style="{ width: isTable || isTableToggle ? '100%' : '50%' }"
-    >
-      <DataTable
-        :data="paginatedData"
-        :with-select="false"
-        :click-rows="false"
-        :borderless="borderless"
-        :always-refer="true"
-        :with-html="true"
-        :header-border="headerBorder"
-        :compact="compact"
-        :columns="normalizedColumns"
-        @sort-change="assignSortParams"
-      />
+    <div v-if="isTable || isTableToggle || showMarkdownTable"
+      :style="{ width: isTable || isTableToggle ? '100%' : '50%' }">
+      <DataTable :data="paginatedData" :with-select="false" :click-rows="false" :borderless="borderless"
+        :always-refer="true" :with-html="true" :header-border="headerBorder" :compact="compact"
+        :columns="normalizedColumns" @sort-change="assignSortParams" />
     </div>
   </div>
-  <Map
-    v-else-if="isMap"
-    :loading="loading"
-    :data="data"
-    :columns="normalizedColumns"
-    :style="{ height: withFooter ? 'calc(100% - 34px)' : '100%' }"
-  />
-  <div
-    v-else
-    :style="{ height: 'calc(100% - 34px)' }"
-  >
-    <Chart
-      ref="chart"
-      :data="data"
-      :loading="loading"
-      :options="preferences.visualization_options"
-      :columns="normalizedColumns"
-      :chart-type="chartType"
-    />
+  <Map v-else-if="isMap" :loading="loading" :data="data" :columns="normalizedColumns"
+    :style="{ height: withFooter ? 'calc(100% - 34px)' : '100%' }" />
+  <div v-else :style="{ height: 'calc(100% - 34px)' }">
+    <Chart ref="chart" :data="data" :loading="loading" :options="preferences.visualization_options"
+      :columns="normalizedColumns" :chart-type="chartType" />
   </div>
-  <div
-    v-if="withFooter && showFooter"
-    class="d-flex justify-content-center text-center border-top bg-white p-1"
-  >
-    <div
-      class="d-flex justify-content-start"
-      style="width: 15%"
-    >
-      <VButton
-        v-if="withSettings"
-        icon="md-settings"
-        size="small"
-        class="md-icon-only"
-        style="height: 24px"
-        @click="$emit('settings')"
-      >
+  <div v-if="withFooter && showFooter" class="d-flex justify-content-center text-center border-top bg-white p-1">
+    <div class="d-flex justify-content-start" style="width: 15%">
+      <VButton v-if="withSettings" icon="md-settings" size="small" class="md-icon-only" style="height: 24px"
+        @click="$emit('settings')">
         {{ i18n['settings'] }}
       </VButton>
     </div>
-    <div
-      :style="{ width: '70%', whiteSpace: 'nowrap' }"
-    >
-      <Pagination
-        v-if="showPagination"
-        :current="paginationParams.current"
-        :total="total"
-        :page-size="pageSize"
-        :page-size-opts="pageSizeOpts"
-        size="small"
-        :show-sizer="!minimalPagination && !isMarkdown && !isHtml && !isValue"
-        :show-elevator="!minimalPagination"
-        :show-total="true"
-        @update:current="paginationParams.current = $event"
-        @update:page-size="paginationParams.pageSize = $event"
-      />
+    <div :style="{ width: '70%', whiteSpace: 'nowrap' }">
+      <Pagination v-if="showPagination" :current="paginationParams.current" :total="total" :page-size="pageSize"
+        :page-size-opts="pageSizeOpts" size="small"
+        :show-sizer="!minimalPagination && !isMarkdown && !isHtml && !isValue" :show-elevator="!minimalPagination"
+        :show-total="true" @update:current="paginationParams.current = $event"
+        @update:page-size="paginationParams.pageSize = $event" />
     </div>
-    <div
-      class="d-flex justify-content-end"
-      style="width: 15%"
-    >
-      <VButton
-        v-if="withTableToggle && !isMarkdown && !isTable && !isValue && !isHtml"
-        :icon="isTableToggle ? 'md-analytics' : 'md-grid'"
-        type="text"
-        size="small"
-        style="height: 24px"
-        @click="toggleTable"
-      />
-      <VButton
-        v-if="withAlert"
-        icon="md-notifications"
-        type="text"
-        size="small"
-        class="md-icon-only"
-        style="height: 24px"
-        @click="$router.push({ name: 'new_alert', query: { query_id: queryId } })"
-      >
+    <div class="d-flex justify-content-end" style="width: 15%">
+      <VButton v-if="withTableToggle && !isMarkdown && !isTable && !isValue && !isHtml"
+        :icon="isTableToggle ? 'md-analytics' : 'md-grid'" type="text" size="small" style="height: 24px"
+        @click="toggleTable" />
+      <VButton v-if="withAlert" icon="md-notifications" type="text" size="small" class="md-icon-only"
+        style="height: 24px" @click="$router.push({ name: 'new_alert', query: { query_id: queryId } })">
         {{ i18n.alert }}
       </VButton>
-      <VButton
-        v-if="!!data.length && withFooterButtonLabels"
-        icon="md-download"
-        type="text"
-        size="small"
-        style="height: 24px"
-        class="md-icon-only"
-        @click="download"
-      >
+      <VButton v-if="!!data.length && withFooterButtonLabels" icon="md-download" type="text" size="small"
+        style="height: 24px" class="md-icon-only" @click="download">
         {{ i18n.download }}
       </VButton>
-      <VButton
-        v-else-if="!!data.length"
-        icon="md-download"
-        type="text"
-        size="small"
-        style="height: 24px"
-        class="md-icon-only"
-        @click="download"
-      />
+      <VButton v-else-if="!!data.length" icon="md-download" type="text" size="small" style="height: 24px"
+        class="md-icon-only" @click="download" />
     </div>
   </div>
 </template>
@@ -172,6 +74,7 @@ import Chart from './chart'
 import Markdown from 'utils/components/markdown'
 import Liquid from 'utils/components/liquid'
 import ValueResult from './value'
+import KPIResult from './kpi'
 import Map from './map'
 import { modelNameMap } from 'data_resources/scripts/schema'
 import csv from 'view3/src/utils/csv'
@@ -186,7 +89,8 @@ export default {
     Markdown,
     Liquid,
     Map,
-    ValueResult
+    ValueResult,
+    KPIResult
   },
   props: {
     data: {
@@ -212,7 +116,7 @@ export default {
     preferences: {
       type: Object,
       required: false,
-      default () {
+      default() {
         return {}
       }
     },
@@ -283,7 +187,7 @@ export default {
     }
   },
   emits: ['settings'],
-  data () {
+  data() {
     return {
       sortParams: {},
       hSplit: 0.5,
@@ -295,13 +199,13 @@ export default {
     }
   },
   computed: {
-    showFooter () {
+    showFooter() {
       return !!this.data.length && (!this.isValue || this.withSettings || this.withAlert || this.showPagination)
     },
-    showPagination () {
+    showPagination() {
       return (this.data.length && this.isTable) || ((this.isHtml || this.isMarkdown || this.isValue) && this.data.length > 1)
     },
-    markdownData () {
+    markdownData() {
       if (this.data.length) {
         return this.columns.reduce((acc, column, index) => {
           if (['datetime', 'date'].includes(column.column_type)) {
@@ -318,7 +222,7 @@ export default {
         return {}
       }
     },
-    sortedData () {
+    sortedData() {
       const { key, order } = this.sortParams
       const orderMultiplier = order === 'desc' ? -1 : 1
 
@@ -328,43 +232,46 @@ export default {
         return this.data
       }
     },
-    total () {
+    total() {
       return this.data.length
     },
-    isTable () {
+    isTable() {
       return !this.preferences.visualization || this.preferences.visualization === 'table'
     },
-    isMarkdown () {
+    isMarkdown() {
       return this.preferences.visualization === 'markdown'
     },
-    isHtml () {
+    isHtml() {
       return this.preferences.visualization === 'html'
     },
-    isValue () {
+    isValue() {
       return this.preferences.visualization === 'value'
     },
-    isMap () {
+    isKPI() {
+      return this.preferences.visualization === 'kpi'
+    },
+    isMap() {
       return this.preferences.visualization === 'map'
     },
-    pageSizeOpts () {
+    pageSizeOpts() {
       return [20, 50, 100, 250, 500, 1000]
     },
-    chartType () {
+    chartType() {
       if (this.isTable) {
         return ''
       } else {
         return this.preferences.visualization.replace(/_chart$/, '')
       }
     },
-    pageSize () {
+    pageSize() {
       return (this.isHtml || this.isMarkdown || this.isValue) ? 1 : this.paginationParams.pageSize
     },
-    paginatedData () {
+    paginatedData() {
       const fromIndex = (this.paginationParams.current - 1) * this.pageSize
 
       return this.sortedData.slice(fromIndex, fromIndex + this.pageSize)
     },
-    normalizedColumns () {
+    normalizedColumns() {
       return this.columns.map((column, index) => {
         let reference
         const [, modelName] = column.name.match(/^(\w+)_id$/) || []
@@ -384,21 +291,21 @@ export default {
     }
   },
   watch: {
-    defaultPageSize (value) {
+    defaultPageSize(value) {
       this.paginationParams.pageSize = value
     },
-    data () {
+    data() {
       this.paginationParams.current = 1
     }
   },
   methods: {
-    assignSortParams (params) {
+    assignSortParams(params) {
       this.sortParams = params
     },
-    toggleTable () {
+    toggleTable() {
       this.isTableToggle = !this.isTableToggle
     },
-    download () {
+    download() {
       const fileType = this.$refs.chart ? 'png' : 'csv'
       const dateTime = formatDate(new Date(), {
         year: 'numeric',

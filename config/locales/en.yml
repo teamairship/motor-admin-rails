@@ -113,6 +113,7 @@ en:
     items_have_been_removed: items have been removed
     items_will_be_removed: '%{count} items will be removed'
     json: JSON
+    kpi: KPI
     label: Currency
     less_or_equal: Less or equal
     less_than: Less than

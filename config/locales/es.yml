@@ -75,6 +75,7 @@ es:
     input_type: Tipo de campo
     interval: Intervalo
     items_have_been_removed: elementos fueron eliminados
+    kpi: KPI
     label: Moneda
     line_chart: Gráfico de líneas
     link_name: Nombre del link

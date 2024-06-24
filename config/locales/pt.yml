@@ -129,6 +129,7 @@ pt:
     items_has_been_removed: "itens foram removidos"
     items_will_be_removed: "%{count} itens serão removidos"
     json: "JSON"
+    kpi: "KPI"
     label: "Moeda"
     less_or_equal: "Menor ou igual"
     less_than: "Menor do que"

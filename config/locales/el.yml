@@ -113,6 +113,7 @@ el:
     items_have_been_removed: τα στοιχεία έχουν αφαιρεθεί
     items_will_be_removed: '%{count} τα στοιχεία θα αφαιρεθούν'
     json: JSON
+    kpi: KPI
     label: Νόμισμα
     less_or_equal: Λιγότερο ή ίσο
     less_than: Λιγότερο από
