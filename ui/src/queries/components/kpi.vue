@@ -7,11 +7,11 @@
       {{ i18n['no_data'] }}
     </p>
 
-    <span v-if="change || change === 0" class="badge rounded-pill px-2 py-1" :class="{'bg-kpi-up': isPositiveChange, 'bg-kpi-down': isNegativeChange}">
+    <span v-if="change || change === 0" class="badge rounded-pill px-2 py-1" :class="{'bg-kpi-up': isPositiveChange, 'bg-kpi-down': isNegativeChange, 'bg-kpi-neutral': isNoChange}">
       <i v-if="isPositiveChange" class="ion ion-md-arrow-up mx-1 text-kpi-up"></i>
       <i v-if="isNegativeChange" class="ion ion-md-arrow-down mx-1 text-kpi-down"></i>
 
-      <span :class="{'text-kpi-up': isPositiveChange, 'text-kpi-down': isNegativeChange}">
+      <span :class="{'text-kpi-up': isPositiveChange, 'text-kpi-down': isNegativeChange, 'text-kpi-neutral': isNoChange }">
         {{ change }} {{ label }}
       </span>
 
@@ -45,7 +45,10 @@ export default {
       return this.data[0] || []
     },
     isPositiveChange() {
-      return !this.change.toString().match(/^-/)
+      return !this.change.toString().match(/^-/) && this.change !== 0
+    },
+    isNoChange() {
+      return this.change === 0;
     },
     isNegativeChange() {
       return this.change.toString().match(/^-/)
