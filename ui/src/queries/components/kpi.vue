@@ -7,7 +7,7 @@
       {{ i18n['no_data'] }}
     </p>
 
-    <span v-if="change || change === 0" class="badge rounded-pill px-2 py-1" :class="{'bg-kpi-up': isPositiveChange, 'bg-kpi-down': isNegativeChange, 'bg-kpi-neutral': isNoChange}">
+    <span v-if="showTrends" class="badge rounded-pill px-2 py-1" :class="{'bg-kpi-up': isPositiveChange, 'bg-kpi-down': isNegativeChange, 'bg-kpi-neutral': isNoChange}">
       <i v-if="isPositiveChange" class="ion ion-md-arrow-up mx-1 text-kpi-up"></i>
       <i v-if="isNegativeChange" class="ion ion-md-arrow-down mx-1 text-kpi-down"></i>
 
@@ -66,6 +66,13 @@ export default {
       } else {
         return ''
       }
+    },
+    showTrends() {
+      if(this.dataRow[3] == false) {
+        return false;
+      }
+
+      return (this.change || this.change === 0);
     }
   }
 }
