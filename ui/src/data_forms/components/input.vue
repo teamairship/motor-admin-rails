@@ -227,7 +227,7 @@ export default {
         return new Promise((resolve, reject) => {
           const reader = new FileReader()
 
-          reader.readAsBinaryString(file)
+          reader.readAsArrayBuffer(file)
 
           reader.onload = () => {
             if (this.column.file_direct_upload) {
