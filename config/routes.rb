@@ -19,6 +19,7 @@ Motor::Admin.routes.draw do
       resource :run_api_request, only: %i[show create]
       resource :run_graphql_request, only: %i[create]
       resources :api_configs, only: %i[index create destroy]
+      resources :external_links, only: %i[create update destroy]
       resources :forms, only: %i[index show create update destroy]
       resources :notes, only: %i[index show create update destroy]
       resources :note_tags, only: %i[index]

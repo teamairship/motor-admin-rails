@@ -9,6 +9,8 @@ el:
     add_alert: Προσθήκη ειδοποίησης
     add_column: Προσθήκη Στήλης
     add_dashboard: Προσθήκη Ταμπλό
+    add_external_link: Προσθήκη εξωτερικού συνδέσμου
+    edit_external_link: Επεξεργασία εξωτερικού συνδέσμου
     add_field: Προσθήκη Πεδίου
     add_filter: Προσθήκη Φίλτρου
     add_form: Προσθήκη Φόρμας
@@ -155,6 +157,7 @@ el:
     read_write: Ανάγνωση-Εγγραφή
     reference: Παραπομπή
     reference_resource: Πόρος αναφοράς
+    relative: Σχετικό
     remove: Αφαίρεση
     reports: Αναφορές
     request_param: Παράμετρος αιτήματος

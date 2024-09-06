@@ -35,6 +35,18 @@ class <%= migration_class_name %> < ActiveRecord::Migration[<%= ActiveRecord::Mi
               where: 'deleted_at IS NULL'
     end
 
+    create_table :motor_external_links do |t|
+      t.column :name, :string, null: false
+      t.column :url, :string, null: false
+      t.column :relative, :boolean, null: false, default: false
+      t.column :author_id, :bigint
+      t.column :author_type, :string
+      t.column :preferences, :text, null: false
+      t.column :deleted_at, :datetime
+
+      t.timestamps
+    end
+
     create_table :motor_forms do |t|
       t.column :name, :string, null: false
       t.column :description, :text
@@ -254,6 +266,7 @@ class <%= migration_class_name %> < ActiveRecord::Migration[<%= ActiveRecord::Mi
     drop_table :motor_audits
     drop_table :motor_alert_locks
     drop_table :motor_alerts
+    drop_table :motor_external_links
     drop_table :motor_forms
     drop_table :motor_taggable_tags
     drop_table :motor_tags

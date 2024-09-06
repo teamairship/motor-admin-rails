@@ -8,6 +8,8 @@ en:
     add_action: Add Action
     add_alert: Add Alert
     add_column: Add Column
+    add_external_link: Add External Link
+    edit_external_link: Edit External Link
     add_dashboard: Add Dashboard
     add_field: Add Field
     add_filter: Add Filter
@@ -155,6 +157,7 @@ en:
     read_write: Read-Write
     reference: Reference
     reference_resource: Reference resource
+    relative: Relative
     remove: Remove
     reports: Reports
     request_param: Request param

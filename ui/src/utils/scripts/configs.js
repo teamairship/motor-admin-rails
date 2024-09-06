@@ -9,6 +9,7 @@ const canCanRules = JSON.parse(appNode.getAttribute('data-current-rules'))
 const databaseNames = JSON.parse(appNode.getAttribute('data-databases'))
 const i18nDict = JSON.parse(appNode.getAttribute('data-i18n'))
 const isStandalone = !!adminSettingsPath
+const resourcesOrder = JSON.parse(appNode.getAttribute('data-resources-order'))
 
 export {
   version,
@@ -19,5 +20,6 @@ export {
   i18nDict,
   isStandalone,
   isActiveStorageDirectUploadsEnabled,
-  databaseNames
+  databaseNames,
+  resourcesOrder
 }

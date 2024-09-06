@@ -9,6 +9,8 @@ es:
     add_alert: Añadir Alerta
     add_column: Añadir Columna
     add_dashboard: Añadir Dashboard
+    add_external_link: Añadir Enlace Externo
+    edit_external_link: Editar Enlace Externo
     add_field: Añadir Campo
     add_filter: Añadir Filtro
     add_form: Añadir Formulario
@@ -106,6 +108,7 @@ es:
     query_revisions: Revisiones de la consulta
     reference: Referencia
     reference_resource: Recurso de referencia
+    relative: Relativo
     remove: Eliminar
     reports: Reportes
     request_param: Parametro de request

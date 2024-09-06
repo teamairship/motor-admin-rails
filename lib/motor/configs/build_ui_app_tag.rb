@@ -58,7 +58,10 @@ module Motor
                                            current_ability),
           alerts: alerts_data_hash(build_cache_key(cache_keys, :alerts, current_user, current_ability),
                                    current_ability),
-          forms: forms_data_hash(build_cache_key(cache_keys, :forms, current_user, current_ability), current_ability) }
+          forms: forms_data_hash(build_cache_key(cache_keys, :forms, current_user, current_ability), current_ability),
+          external_links: external_links_data_hash(configs_cache_key),
+          resources_order: resources_order_data_hash(configs_cache_key),
+        }
       end
       # rubocop:enable Metrics/AbcSize
       # rubocop:enable Metrics/MethodLength
@@ -171,6 +174,16 @@ module Motor
         Motor::Configs::LoadFromCache.load_forms(cache_key: cache_key, current_ability: current_ability)
                                      .as_json(only: %i[id name updated_at],
                                               include: { tags: { only: %i[id name] } })
+      end
+
+      def external_links_data_hash(cache_key = nil)
+        Motor::ExternalLink.all.active.load.map { |link| link.to_display_h }
+      end
+
+      def resources_order_data_hash(cache_key = nil)
+        configs = Motor::Configs::LoadFromCache.load_configs(cache_key: cache_key)
+
+        order = configs.find { |c| c.key == 'resources.order' }&.value || []
       end
     end
   end

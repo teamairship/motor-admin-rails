@@ -82,15 +82,18 @@
 import { schema, modelSlugMap, modelNameMap } from '../scripts/schema'
 import Resource from '../components/resource'
 import ResourceTable from '../components/table'
+
 import ResourceKanban from '../components/kanban'
 import Breadcrumbs from 'navigation/components/breadcrumbs'
 import ResourcesMenu from 'navigation/components/resources'
 import Home from 'navigation/components/home'
 import { widthLessThan } from 'utils/scripts/dimensions'
-
+import { resourcesOrder } from 'utils/scripts/configs'
+import { externalLinks } from 'data_resources/scripts/external_links'
 import { breadcrumbStore } from 'navigation/scripts/breadcrumb_store'
 import { isShowSettings, closeSettings } from 'settings/scripts/toggle'
 import SettingsMask from 'settings/components/mask'
+
 
 function pushTableScrollState () {
   if (this.$refs.table) {
@@ -117,7 +120,7 @@ export default {
     ResourcesMenu,
     ResourceKanban,
     Home,
-    SettingsMask
+    SettingsMask,
   },
   beforeRouteUpdate: pushTableScrollState,
   beforeRouteLeave: pushTableScrollState,
@@ -143,7 +146,8 @@ export default {
       }
     },
     visibleResources () {
-      return schema.filter((model) => model.visible)
+      const visibleResources = schema.concat(externalLinks).filter((r) => r.visible)
+      return this.orderedList(visibleResources)
     },
     fragments () {
       return this.$route.params.fragments || []
@@ -274,7 +278,15 @@ export default {
     },
     toggleResourcesMenu () {
       this.isMenuSider = !this.isMenuSider
-    }
+    },
+    orderedList(input) {
+      const orderedResults = resourcesOrder.map((name) => {
+        return input.find((e) => e.name === name)
+      })
+
+      // remove undefined
+      return orderedResults.filter((e) => e);
+    },
   }
 }
 </script>

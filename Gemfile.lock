@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    motor-admin (0.4.32)
+    motor-admin (0.4.37)
       ar_lazy_preload (~> 1.0)
       audited (~> 5.0)
       cancancan (~> 3.0)
@@ -120,7 +120,7 @@ GEM
     brakeman (6.1.2)
       racc
     builder (3.2.4)
-    cancancan (3.5.0)
+    cancancan (3.6.1)
     capybara (3.40.0)
       addressable
       matrix

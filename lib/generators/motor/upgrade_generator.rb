@@ -24,8 +24,9 @@ module Motor
         end
 
         migration_template 'install_notes.rb', 'db/migrate/install_motor_notes.rb' unless Motor::Note.table_exists?
+        migration_template 'install_external_links.rb', 'db/migrate/install_external_links.rb' unless Motor::ExternalLink.table_exists?
 
-        if Motor::ApiConfig.table_exists? && !with_api_actions? && Motor::Note.table_exists?
+        if Motor::ApiConfig.table_exists? && !with_api_actions? && Motor::Note.table_exists? && Motor::ExternalLink.table_exists?
           puts 'The latest Motor Admin features are already configured'
         else
           puts 'Run `rake db:migrate` to update DB schema'

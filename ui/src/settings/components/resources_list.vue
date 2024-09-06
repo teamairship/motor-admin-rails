@@ -9,34 +9,65 @@
     v-else
     class="pt-3"
   >
+    <div class="flex justify-end my-3">
+      <VButton
+        v-if="!addExternalLinkToggled"
+        icon="md-add"
+        @click="addExternalLink"
+      >
+        {{ i18n['add_external_link'] }}
+      </VButton>
+
+      <ResourceExternalLinkForm 
+        v-if="addExternalLinkToggled" 
+        @cancel="addExternalLinkToggled = false" 
+        @submit="handleExternalLinkSubmit"
+      />
+    </div>
+
     <VueDraggableNext
-      :list="schema"
+      :list="list"
       ghost-class="ghost"
       handle=".handle"
       @change="updateOrder"
     >
-      <ResourceItem
-        v-for="model in schema"
-        :key="model.slug"
-        :resource="model"
-        class="cursor-pointer mb-2"
-        @click="dataSelectedResource = model"
-      />
+
+      <div v-for="model in list" :key="model.slug">
+        <ResourceExternalLinkItem v-if="model.url"
+          :resource="model"
+          class="cursor-pointer mb-2"
+          @delete="onExternalLinkDeleted" 
+        />
+
+        <ResourceItem
+          v-else
+          :resource="model"
+          class="cursor-pointer mb-2"
+          @click="dataSelectedResource = model"
+        />
+
+      </div>
     </VueDraggableNext>
   </div>
 </template>
 
 <script>
 import ResourceItem from './resource_list_item'
+import ResourceExternalLinkForm from './resource_external_link_form'
+import ResourceExternalLinkItem from './resource_external_link_item'
 import ResourceSettings from './resource'
 import { schema } from 'data_resources/scripts/schema'
+import { externalLinks } from 'data_resources/scripts/external_links'
+import { resourcesOrder } from 'utils/scripts/configs'
 import api from 'api'
 
 export default {
   name: 'ResourcesSettings',
   components: {
     ResourceSettings,
-    ResourceItem
+    ResourceItem,
+    ResourceExternalLinkForm,
+    ResourceExternalLinkItem
   },
   props: {
     selectedResource: {
@@ -53,11 +84,13 @@ export default {
   emits: ['change-resource'],
   data () {
     return {
-      dataSelectedResource: this.selectedResource
+      dataSelectedResource: this.selectedResource,
+      addExternalLinkToggled: false,
+      list: this.orderedList(schema.concat(externalLinks))
     }
   },
   computed: {
-    schema: () => schema
+
   },
   watch: {
     dataSelectedResource () {
@@ -65,16 +98,43 @@ export default {
     }
   },
   methods: {
+    addExternalLink() {
+      this.addExternalLinkToggled = true
+    },
+    handleExternalLinkSubmit(externalLink) {
+      return api.post('external_links', {
+        data: {
+          ...externalLink
+        }
+      }).then((result) => {
+        this.list.push(result.data)
+        this.addExternalLinkToggled = false
+      }).catch((error) => {
+        console.error(error)
+      })
+    },
     updateOrder () {
       return api.post('configs', {
         data: {
           key: 'resources.order',
-          value: this.schema.map((e) => e.name)
+          value: this.list.map((e) => e.name)
         }
       }).then((result) => {
       }).catch((error) => {
         console.error(error)
       })
+    },
+    orderedList(input) {
+      const orderedResults = resourcesOrder.map((name) => {
+        return input.find((e) => e.name === name)
+      })
+
+      // remove undefined
+      return orderedResults.filter((e) => e);
+    },
+    onExternalLinkDeleted(externalLink) {
+      const index = this.list.findIndex((e) => e.id === externalLink.id)
+      this.list.splice(index, 1)
     }
   }
 }

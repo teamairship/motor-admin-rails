@@ -6,8 +6,15 @@
     :open-names="openNames"
     @on-select="$emit('select', $event)"
   >
+
+  <div v-for="resource in resources" :key="resource.slug">
+    <ResourceExternalLinkMenuItem
+      v-if="resource.url"
+      :resource="resource"
+      :class="itemClass" />
+
     <ResourceMenuItem
-      v-for="resource in resources"
+      v-else
       :key="resource.slug"
       :size="size"
       :with-scopes="withScopes"
@@ -15,16 +22,19 @@
       :resource="resource"
       :class="itemClass"
     />
+  </div>
   </Menu>
 </template>
 
 <script>
 import ResourceMenuItem from './resource_menu_item'
+import ResourceExternalLinkMenuItem from './resource_external_link_menu_item'
 
 export default {
   name: 'ResourcesNavigation',
   components: {
-    ResourceMenuItem
+    ResourceMenuItem,
+    ResourceExternalLinkMenuItem
   },
   props: {
     resources: {

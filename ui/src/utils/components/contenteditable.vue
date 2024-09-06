@@ -18,6 +18,14 @@
     class="contenteditable-edit-button ms-2 cursor-pointer"
     @click.stop="onEditClick"
   />
+
+  <Icon
+    v-if="withDeleteButton && !isContentEditable"
+    type="md-trash"
+    class="contenteditable-edit-button ms-2 cursor-pointer"
+    @click.stop="onDeleteClick"
+  />
+
 </template>
 
 <script>
@@ -43,9 +51,14 @@ export default {
       type: Boolean,
       required: false,
       default: true
+    },
+    withDeleteButton: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
-  emits: ['update:modelValue', 'change'],
+  emits: ['update:modelValue', 'change', 'delete'],
   data () {
     return {
       value: this.modelValue,
@@ -73,6 +86,11 @@ export default {
         document.getSelection().collapseToEnd()
       })
     },
+
+    onDeleteClick() {
+      this.$emit('delete')
+    },
+
     onFocusLost () {
       this.isContentEditable = false
 
