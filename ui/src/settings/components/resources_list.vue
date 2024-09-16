@@ -125,12 +125,21 @@ export default {
       })
     },
     orderedList(input) {
-      const orderedResults = resourcesOrder.map((name) => {
+      let orderedResults = resourcesOrder.map((name) => {
         return input.find((e) => e.name === name)
       })
 
       // remove undefined
-      return orderedResults.filter((e) => e);
+      orderedResults = orderedResults.filter((e) => e)
+
+      // add the rest
+      input.forEach((e) => {
+        if (!orderedResults.includes(e)) {
+          orderedResults.push(e)
+        }
+      })
+
+      return orderedResults
     },
     onExternalLinkDeleted(externalLink) {
       const index = this.list.findIndex((e) => e.id === externalLink.id)

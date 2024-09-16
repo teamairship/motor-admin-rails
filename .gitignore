@@ -19,3 +19,4 @@
 /dist
 *.gem
 .tool-versions
+.idea
