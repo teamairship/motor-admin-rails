@@ -5,6 +5,7 @@ PATH
       ar_lazy_preload (~> 1.0)
       audited (~> 5.0)
       cancancan (~> 3.0)
+      csv (>= 3.0)
       fugit (~> 1.0)
       rails (>= 5.2)
 

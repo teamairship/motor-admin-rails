@@ -42,7 +42,7 @@
             {{ ' ' }} {{ i18n['stacked_bars'] }}
           </Checkbox>
         </template>
-        <template v-if="!['table', 'markdown', 'html', 'value', 'map'].includes(preferences.visualization)">
+        <template v-if="!['table', 'markdown', 'html', 'value', 'map', 'iframe'].includes(preferences.visualization)">
           <p class="fs-4 fw-bold my-1">
             Format
           </p>
@@ -54,8 +54,7 @@
             </Radio>
           </RadioGroup>
         </template>
-        <template
-          v-if="!['table', 'markdown', 'html'].includes(preferences.visualization) && preferences.visualization_options.label_format === 'currency'">
+        <template v-if="!['table', 'markdown', 'html', 'iframe'].includes(preferences.visualization) && preferences.visualization_options.label_format === 'currency'">
           <p class="fs-4 fw-bold my-1">
             {{ i18n['currency'] }}
           </p>
@@ -95,6 +94,11 @@ export default {
       required: false,
       default: () => []
     },
+    withIframe: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
     withVariablesEditor: {
       type: Boolean,
       required: false,
@@ -108,8 +112,8 @@ export default {
     }
   },
   computed: {
-    visualizationOptions() {
-      return [
+    visualizationOptions () {
+      const options = [
         { label: this.i18n.table, value: 'table' },
         { label: this.i18n.value, value: 'value' },
         { label: this.i18n.kpi, value: 'kpi' },
@@ -123,6 +127,12 @@ export default {
         { label: this.i18n.funnel, value: 'funnel' },
         { label: this.i18n.map, value: 'map' }
       ]
+
+      if (this.withIframe) {
+        options.push({ label: 'Iframe', value: 'iframe' })
+      }
+
+      return options
     },
     formatOptions() {
       return [
