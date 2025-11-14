@@ -18,7 +18,8 @@ module Motor
 
       result = load_query_for_csv(relation)
 
-      CSV.generate do |csv|
+      # Add UTF-8 BOM to ensure proper encoding in Excel and other applications
+      "\uFEFF" + CSV.generate do |csv|
         csv << result.columns
 
         result.rows.each { |row| csv << row }

@@ -414,7 +414,7 @@ export default {
           hour12: true
         }).replace(',', '')
 
-        const dataUrl = URL.createObjectURL(new Blob([result.data], { type: 'data:text/csv;charset=utf-8' }))
+        const dataUrl = URL.createObjectURL(new Blob([result.data], { type: 'text/csv;charset=utf-8' }))
 
         const link = document.createElement('a')
 
