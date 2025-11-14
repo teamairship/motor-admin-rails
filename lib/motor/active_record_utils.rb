@@ -20,14 +20,11 @@ module Motor
 
       # Add UTF-8 BOM to ensure proper encoding in Excel and other applications
       bom = +"\xEF\xBB\xBF"
-      bom.force_encoding('UTF-8')
 
       CSV.generate(bom, encoding: 'UTF-8') do |csv|
-        csv << result.columns.map { |col| col.to_s.encode('UTF-8', invalid: :replace, undef: :replace) }
+        csv << result.columns
 
-        result.rows.each do |row|
-          csv << row.map { |cell| cell.to_s.encode('UTF-8', invalid: :replace, undef: :replace) }
-        end
+        result.rows.each { |row| csv << row }
       end
     end
 
