@@ -19,11 +19,15 @@ module Motor
       result = load_query_for_csv(relation)
 
       # Add UTF-8 BOM to ensure proper encoding in Excel and other applications
-      "\xEF\xBB\xBF".force_encoding('UTF-8') + CSV.generate do |csv|
+      bom = "\xEF\xBB\xBF".force_encoding('UTF-8')
+
+      csv_data = CSV.generate do |csv|
         csv << result.columns
 
         result.rows.each { |row| csv << row }
       end
+
+      bom + csv_data
     end
 
     def load_query_for_csv(relation)
