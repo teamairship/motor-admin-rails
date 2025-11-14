@@ -22,10 +22,12 @@ module Motor
       bom = +"\xEF\xBB\xBF"
       bom.force_encoding('UTF-8')
 
-      CSV.generate(bom) do |csv|
-        csv << result.columns
+      CSV.generate(bom, encoding: 'UTF-8') do |csv|
+        csv << result.columns.map { |col| col.to_s.encode('UTF-8', invalid: :replace, undef: :replace) }
 
-        result.rows.each { |row| csv << row }
+        result.rows.each do |row|
+          csv << row.map { |cell| cell.to_s.encode('UTF-8', invalid: :replace, undef: :replace) }
+        end
       end
     end
 
