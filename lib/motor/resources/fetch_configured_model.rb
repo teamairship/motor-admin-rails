@@ -178,12 +178,19 @@ module Motor
       end
 
       def define_belongs_to_reflection(klass, config)
-        klass.belongs_to(config[:name].to_sym,
-                         class_name: config[:model_name]&.classify,
-                         foreign_key: config[:foreign_key],
-                         polymorphic: config[:polymorphic],
-                         primary_key: config[:primary_key],
-                         optional: true)
+        options = {
+          foreign_key: config[:foreign_key],
+          primary_key: config[:primary_key],
+          optional: true
+        }
+        
+        if config[:polymorphic]
+          options[:polymorphic] = true
+        else
+          options[:class_name] = config[:model_name]&.classify
+        end
+        
+        klass.belongs_to(config[:name].to_sym, **options)
       end
 
       def define_has_one_reflection(klass, config)
