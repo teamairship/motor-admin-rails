@@ -125,13 +125,24 @@ module Motor
 
       def update_taggable_items(records, config_items, update_proc)
         record_ids_hash = records.index_by(&:id)
+        # Fallback index for name-based matching (dashboards use :title, others use :name)
+        name_key = records.klass.column_names.include?('title') ? :title : :name
+        record_names_hash = records.index_by { |r| r.public_send(name_key) }
 
         config_items.each_with_object([[], []]) do |attrs, (processed_acc, create_acc)|
           record = record_ids_hash[attrs[:id]]
 
+          # Fallback: match by name/title when id doesn't match (e.g., UUID PKs differ across environments)
+          if record.nil?
+            fallback_key = attrs[:title].present? ? :title : :name
+            record = record_names_hash[attrs[fallback_key]]
+            # Update attrs id to match the existing record so it gets updated, not duplicated
+            attrs[:id] = record.id if record
+          end
+
           next create_acc << attrs unless record
 
-          processed_acc << record if record
+          processed_acc << record
 
           next if record.updated_at >= attrs[:updated_at]
 
