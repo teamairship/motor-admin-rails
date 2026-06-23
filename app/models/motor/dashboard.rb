@@ -19,8 +19,16 @@ module Motor
 
     scope :active, -> { where(deleted_at: nil) }
 
+    before_create :assign_uuid_id
+
     def queries
       Motor::Query.where(id: preferences[:layout].pluck(:query_id))
+    end
+
+    private
+
+    def assign_uuid_id
+      self.id ||= SecureRandom.uuid
     end
   end
 end

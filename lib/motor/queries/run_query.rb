@@ -209,7 +209,8 @@ module Motor
       end
 
       def fetch_query_data(variable_name)
-        query = Motor::Query.find(variable_name.split('_').last)
+        query_id = variable_name.delete_prefix(QUERY_VARIABLE_PREFIX)
+        query = Motor::Query.find(query_id)
 
         result = Motor::Queries::RunQuery.call(query)
         columns = result.columns.pluck(:name)

@@ -5,6 +5,10 @@ module Motor
     module_function
 
     def reset_id_sequence!(model)
+      # UUID primary keys have no sequence to reset
+      pk_column = model.columns_hash[model.primary_key]
+      return if pk_column && pk_column.sql_type == 'uuid'
+
       case ActiveRecord::Base.connection.class.name
       when 'ActiveRecord::ConnectionAdapters::PostgreSQLAdapter'
         ActiveRecord::Base.connection.reset_pk_sequence!(model.table_name)

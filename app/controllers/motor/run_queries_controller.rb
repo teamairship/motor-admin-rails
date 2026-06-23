@@ -34,8 +34,9 @@ module Motor
     end
 
     def authorize_queries!(query)
-      query.sql_body.to_s.scan(/query_\d+/).each do |name|
-        Motor::Query.accessible_by(current_ability).find(name.split('_').last)
+      query.sql_body.to_s.scan(/query_[\w-]+/).each do |name|
+        query_id = name.delete_prefix('query_')
+        Motor::Query.accessible_by(current_ability).find(query_id)
       end
     end
 
