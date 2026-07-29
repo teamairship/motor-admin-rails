@@ -5,6 +5,10 @@ module Motor
     module_function
 
     def reset_id_sequence!(model)
+      # UUID primary keys have no sequence to reset
+      pk_column = model.columns_hash[model.primary_key]
+      return if pk_column && pk_column.sql_type == 'uuid'
+
       case ActiveRecord::Base.connection.class.name
       when 'ActiveRecord::ConnectionAdapters::PostgreSQLAdapter'
         ActiveRecord::Base.connection.reset_pk_sequence!(model.table_name)
@@ -18,14 +22,14 @@ module Motor
 
       result = load_query_for_csv(relation)
 
-      # Add UTF-8 BOM to ensure proper encoding in Excel and other applications
-      bom = +"\xEF\xBB\xBF"
-
-      CSV.generate(bom, encoding: 'UTF-8') do |csv|
+      csv_string = CSV.generate(encoding: 'UTF-8') do |csv|
         csv << result.columns
 
         result.rows.each { |row| csv << row }
       end
+
+      # Prepend UTF-8 BOM so Excel correctly interprets the encoding
+      "\xEF\xBB\xBF#{csv_string}"
     end
 
     def load_query_for_csv(relation)

@@ -20,6 +20,8 @@ module Motor
 
     scope :active, -> { where(deleted_at: nil) }
 
+    before_create :assign_uuid_id
+
     def result(variables_hash = {})
       result = Motor::Queries::RunQuery.call!(self, variables_hash: variables_hash)
       column_names = result.columns.pluck(:name)
@@ -27,6 +29,12 @@ module Motor
       result.data.map { |row| column_names.zip(row).to_h }
     end
     alias run result
+
+    private
+
+    def assign_uuid_id
+      self.id ||= SecureRandom.uuid
+    end
   end
 end
 

@@ -19,5 +19,13 @@ module Motor
     end
 
     scope :active, -> { where(deleted_at: nil) }
+
+    before_create :assign_uuid_id
+
+    private
+
+    def assign_uuid_id
+      self.id ||= SecureRandom.uuid
+    end
   end
 end

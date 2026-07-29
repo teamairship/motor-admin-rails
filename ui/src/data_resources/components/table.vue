@@ -403,7 +403,8 @@ export default {
       this.isDownloadLoading = true
 
       return api.get(this.queryPath + '.csv', {
-        params: this.queryParams
+        params: this.queryParams,
+        responseType: 'blob'
       }).then((result) => {
         const dateTime = formatDate(new Date(), {
           year: 'numeric',
@@ -423,7 +424,17 @@ export default {
 
         link.click()
       }).catch((error) => {
-        if (error.response) {
+        if (error.response?.data instanceof Blob) {
+          error.response.data.text().then((text) => {
+            try {
+              const json = JSON.parse(text)
+
+              this.$Message.error(truncate(json.errors.join('\n'), 70))
+            } catch (e) {
+              this.$Message.error(truncate(text, 70))
+            }
+          })
+        } else if (error.response) {
           this.$Message.error(truncate(error.response.data.errors.join('\n'), 70))
         } else {
           this.$Message.error(error.message)
